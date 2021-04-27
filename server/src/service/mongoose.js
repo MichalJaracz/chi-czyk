@@ -1,7 +1,11 @@
-const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 
-const uri = "mongodb+srv://michalj0721@gmail.com:Jakistam123@cluster0.73pmi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = "mongodb+srv://misiuCep:vky1Jh8b9XAAl0ya@cluster0.73pmi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
-const mongoClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoClient = mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => console.log('DB Connected'));
 
 module.exports = { mongoClient };
