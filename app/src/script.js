@@ -88,7 +88,8 @@ class Game {
     constructor() {
         this.dice = [1, 2, 3, 4, 5, 6];
         this.div = null;
-        this.i = 60
+        this.i = 60;
+        this.data = null;
     }
 
     rollDice() {
@@ -112,6 +113,10 @@ class Game {
             $('#red1').append(`<a>${this.i}</a>`);
             this.i--;
         }
+
+        fetch("http://localhost:3000/room", { method: "POST" })
+            .then((response) => response.data())
+            .then((data) => (console.log(data)));
     }
 
 }
@@ -128,5 +133,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById("btDice").addEventListener("click", () => {
         game.appendNumber()
     })
-    setInterval(game.timer(), 1000)
+    setInterval(game.timer(), 3000)
 })
