@@ -7,43 +7,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="src/style.css">
+    <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+    <script src="src/script.js"></script>
 </head>
 
 <body>
+    <div class="hidden" id="hidden">
+        <input type="text" id="myText" value="Nick">
+        <button id="btOk" class="bt-ok">ok</button>
+    </div>
     <div class="header">
         <div class="nicks">
-            <span id="red">vlavla</span>
-            <span id="blue">sadsad</span>
-            <span id="green">sadsadasdas</span>
-            <span id="yellow">sadsad</span>
+            <span id="red" style="background-color: rgba(255, 0, 0, 0.6); color: white;">
+                <div class="timer" id="red1"></div>
+            </span>
+            <span id="blue" style="background-color: rgba(0, 0, 255, 0.6); color: white;">
+                <div id="blue1"></div>
+            </span>
+            <span id="green" style="background-color: rgba(0, 255, 0, 0.6); color: white;">
+                <div></div>
+            </span>
+            <span id="yellow" style="background-color: rgba(255, 255, 0, 0.6); color: white;">
+                <div></div>
+            </span>
         </div>
     </div>
 
     <div class="board">
+        <button id="btDice" class="bt-dice">Rzuć</button>
+        <div id="diceNumber" class="dice-number"></div>
         <div class="square">
             <div class="red-square">
-                <div class="pawn" style="position: absolute; top: 10px; left: 10px;"></div>
-                <div class="pawn" style="position: absolute; top: 10px; left: 60px;"></div>
-                <div class="pawn" style="position: absolute; top: 60px; left: 10px;"></div>
-                <div class="pawn" style="position: absolute; top: 60px; left: 60px;"></div>
+                <div id="redField0" class="pawn" style="position: absolute; top: 10px; left: 10px;"></div>
+                <div id="redField1" class="pawn" style="position: absolute; top: 10px; left: 60px;"></div>
+                <div id="redField2" class="pawn" style="position: absolute; top: 60px; left: 10px;"></div>
+                <div id="redField3" class="pawn" style="position: absolute; top: 60px; left: 60px;"></div>
             </div>
             <div class="blue-square">
-                <div class="pawn" style="position: absolute; top: 10px; left: 10px;"></div>
-                <div class="pawn" style="position: absolute; top: 10px; left: 60px;"></div>
-                <div class="pawn" style="position: absolute; top: 60px; left: 10px;"></div>
-                <div class="pawn" style="position: absolute; top: 60px; left: 60px;"></div>
+                <div id="blueField0" class="pawn" style="position: absolute; top: 10px; left: 10px;"></div>
+                <div id="blueField1" class="pawn" style="position: absolute; top: 10px; left: 60px;"></div>
+                <div id="blueField2" class="pawn" style="position: absolute; top: 60px; left: 10px;"></div>
+                <div id="blueField3" class="pawn" style="position: absolute; top: 60px; left: 60px;"></div>
             </div>
             <div class="green-square">
-                <div class="pawn" style="position: absolute; top: 10px; left: 10px;"></div>
-                <div class="pawn" style="position: absolute; top: 10px; left: 60px;"></div>
-                <div class="pawn" style="position: absolute; top: 60px; left: 10px;"></div>
-                <div class="pawn" style="position: absolute; top: 60px; left: 60px;"></div>
+                <div id="greenField0" class="pawn" style="position: absolute; top: 10px; left: 10px;"></div>
+                <div id="greenField1" class="pawn" style="position: absolute; top: 10px; left: 60px;"></div>
+                <div id="greenField2" class="pawn" style="position: absolute; top: 60px; left: 10px;"></div>
+                <div id="greenField3" class="pawn" style="position: absolute; top: 60px; left: 60px;"></div>
             </div>
             <div class="yellow-square">
-                <div class="pawn" style="position: absolute; top: 10px; left: 10px;"></div>
-                <div class="pawn" style="position: absolute; top: 10px; left: 60px;"></div>
-                <div class="pawn" style="position: absolute; top: 60px; left: 10px;"></div>
-                <div class="pawn" style="position: absolute; top: 60px; left: 60px;"></div>
+                <div id="yellowField0" class="pawn" style="position: absolute; top: 10px; left: 10px;"></div>
+                <div id="yellowField1" class="pawn" style="position: absolute; top: 10px; left: 60px;"></div>
+                <div id="yellowField2" class="pawn" style="position: absolute; top: 60px; left: 10px;"></div>
+                <div id="yellowField3" class="pawn" style="position: absolute; top: 60px; left: 60px;"></div>
             </div>
             <div class="pawn" style="position: absolute; top: 10px; left: 280px;"></div>
             <div class="pawn" style="position: absolute; top: 10px; left: 330px; background-color: blue;"></div>
