@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const roomSchema = new mongoose.Schema({
   gameOn: Boolean,
+  turn: String,
   plansza: {
     red: [Number],
     green: [Number],
@@ -11,9 +12,6 @@ const roomSchema = new mongoose.Schema({
   red: {
     nick: String,
     color: String,
-    insertTime: Number,
-    lastAct: Number,
-    serverTime: Number,
     status: {
       type: String,
       enum: ['connected', 'ready', 'void'],
@@ -23,9 +21,6 @@ const roomSchema = new mongoose.Schema({
   green: {
     nick: String,
     color: String,
-    insertTime: Number,
-    lastAct: Number,
-    serverTime: Number,
     status: {
       type: String,
       enum: ['connected', 'ready', 'void'],
@@ -35,9 +30,6 @@ const roomSchema = new mongoose.Schema({
   blue: {
     nick: String,
     color: String,
-    insertTime: Number,
-    lastAct: Number,
-    serverTime: Number,
     status: {
       type: String,
       enum: ['connected', 'ready', 'void'],
@@ -47,9 +39,6 @@ const roomSchema = new mongoose.Schema({
   yellow: {
     nick: String,
     color: String,
-    insertTime: Number,
-    lastAct: Number,
-    serverTime: Number,
     status: {
       type: String,
       enum: ['connected', 'ready', 'void'],
@@ -63,6 +52,7 @@ const Room = mongoose.model('Room', roomSchema);
 const createRoom = async () => {
   return new Room({
     gameOn: false,
+    turn: 'red',
     plansza: {
       red: [0, 1, 2, 3],
       green: [0, 1, 2, 3],
@@ -72,30 +62,18 @@ const createRoom = async () => {
     turn: 'red',
     red: {
       nick: '',
-      // insertTime: Date.now(),
-      // lastAct: Date.now(),
-      // serverTime: Date.now(),
       status: 'void',
     },
     green: {
       nick: '',
-      // insertTime: Date.now(),
-      // lastAct: Date.now(),
-      // serverTime: Date.now(),
       status: 'void',
     },
     blue: {
       nick: '',
-      // insertTime: Date.now(),
-      // lastAct: Date.now(),
-      // serverTime: Date.now(),
       status: 'void',
     },
     yellow: {
       nick: '',
-      // insertTime: Date.now(),
-      // lastAct: Date.now(),
-      // serverTime: Date.now(),
       status: 'void',
     },
   });
@@ -120,13 +98,19 @@ const getUserRoomId = async () => {
 };
 
 const setUserToRoom = async (roomId, nick) => {
-  const userColors = ['red', 'green', 'blue', 'yellow'];
+  const userColors = ['red', 'green'];
   const userRoom = await Room.findById(roomId);
 
   const userColor = userColors.find(color => userRoom[color].nick === '');
   userRoom[userColor].nick = nick;
 
-  return await userRoom.save();
+  if (userColor === 'green') {
+    userRoom.gameOn = true;
+  }
+
+  await userRoom.save();
+
+  return userColor;
 };
 
 module.exports = { Room, createRoom, getLastRoom, getUserRoomId, setUserToRoom };

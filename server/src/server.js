@@ -54,29 +54,37 @@ mongoClient.then(async err => {
     });
 
     app.post('/user', async function (req, res, next) {
+        console.log(req.sessionID);
+        let myColor = null;
+
         if (req.body.username && !req.session.username) {
             const userRoomId = await getUserRoomId();
-            await setUserToRoom(userRoomId, req.body.username);
+            const userColor = await setUserToRoom(userRoomId, req.body.username);
 
             req.session.username = req.body.username;
             req.session.userRoomId = userRoomId;
+            req.session.userColor = userColor;
 
-            res.end();
+            myColor = userColor;
         }
-        res.end();
+
+        if (req.session.userColor) {
+            myColor = req.session.userColor;
+        }
+
+        res.send({ myColor });
     });
 
     app.post('/room', async function (req, res, next) {
-        console.log('POST /room, body:', req.body);
+        // console.log('POST /room, body:', req.body);
 
         let responseData = null;
 
         if (req.session.username && req.session.userRoomId) {
             if (req.body.room) {
                 await Room.findOneAndReplace({ _id: req.session.userRoomId }, req.body.room);
-            } else {
-                responseData = await Room.findById(req.session.userRoomId);
             }
+            responseData = await Room.findById(req.session.userRoomId);
         }
 
         res.setHeader('Content-Type', 'application/json');

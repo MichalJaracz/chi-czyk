@@ -1,10 +1,11 @@
 let appData = null;
+let myColor = null;
+
 let i = 60;
 let firstPawnRed = 0;
 let seconPawnRed = 1;
 let thirdPawnRed = 2;
 let fourthPawnRed = 3;
-
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:3000',
@@ -15,6 +16,16 @@ const apiClient = axios.create({
         'Access-Control-Allow-Origin': '*',
     }
 });
+
+const handleOnPawnClick = (index, clickedPawnColor, diceResult) => {
+    if (clickedPawnColor === myColor) {
+        console.log('on click', index);
+        appData.plansza[myColor][index] = appData.plansza[myColor][index] + diceResult;
+        appData.turn = myColor === 'red' ? 'green' : 'red';
+    } else {
+        console.log('not my color!');
+    }
+};
 
 class StartScreen {
     nick = '';
@@ -65,16 +76,16 @@ class StartScreen {
     }
 
     appendPawns() {
-        appData.plansza.red.forEach(element => {
+        appData.plansza.red.forEach((element, index) => {
             const redFields = [
                 'redField0', 'redField1', 'redField2', 'redField3',
                 ...this.getPawnIds(30),
                 'red-protect-pawn-0', 'red-protect-pawn-1', 'red-protect-pawn-2', 'red-protect-pawn-3'
             ];
             let redDiv = document.getElementById(redFields[element]);
-            redDiv.innerHTML = `<div class="pawn-red" />`;
+            redDiv.innerHTML = `<div class="pawn-red" onclick="handleOnPawnClick(${index}, 'red', ${game.diceResult})" />`;
         });
-        appData.plansza.blue.forEach(element => {
+        appData.plansza.blue.forEach((element, index) => {
             const blueFields = [
                 'blueField0', 'blueField1', 'blueField2', 'blueField3',
                 ...this.getPawnIds(0),
@@ -84,9 +95,9 @@ class StartScreen {
                 'blue-protect-pawn-3'
             ];
             let blueDiv = document.getElementById(blueFields[element]);
-            blueDiv.innerHTML = `<div class="pawn-blue" />`;
+            blueDiv.innerHTML = `<div class="pawn-blue" onclick="handleOnPawnClick(${index}, 'blue', ${game.diceResult})" />`;
         });
-        appData.plansza.green.forEach(element => {
+        appData.plansza.green.forEach((element, index) => {
             const greenFields = [
                 'greenField0', 'greenField1', 'greenField2', 'greenField3',
                 ...this.getPawnIds(10),
@@ -96,9 +107,9 @@ class StartScreen {
                 'green-protect-pawn-3'
             ];
             let greenDiv = document.getElementById(greenFields[element]);
-            greenDiv.innerHTML = `<div class="pawn-green" />`;
+            greenDiv.innerHTML = `<div class="pawn-green" onclick="handleOnPawnClick(${index}, 'green', ${game.diceResult})" />`;
         });
-        appData.plansza.yellow.forEach(element => {
+        appData.plansza.yellow.forEach((element, index) => {
             const yellowFields = [
                 'yellowField0', 'yellowField1', 'yellowField2', 'yellowField3',
                 ...this.getPawnIds(20),
@@ -108,16 +119,32 @@ class StartScreen {
                 'yellow-protect-pawn-3'
             ];
             let yellowDiv = document.getElementById(yellowFields[element]);
-            yellowDiv.innerHTML = `<div class="pawn-yellow" />`;
+            yellowDiv.innerHTML = `<div class="pawn-yellow" onclick="handleOnPawnClick(${index}, 'yellow', ${game.diceResult})" />`;
         });
     }
 
     async setUsername() {
-        return await apiClient.post('/user', { username: this.nick });
+        return await apiClient.post('/user', { username: this.nick }).then(response => {
+            if (response.data) {
+                myColor = response.data.myColor;
+            }
+        });
+    }
+
+    renderDice() {
+        if (appData.turn === myColor) {
+            $('#btDice').removeClass('bt-dice-hide');
+            $('#btDice').addClass('bt-dice');
+        } else {
+            $('#btDice').removeClass('bt-dice');
+            $('#btDice').addClass('bt-dice-hide');
+        }
     }
 }
 
 class Game {
+    diceResult = null;
+
     constructor() {
         this.dice = [1, 2, 3, 4, 5, 6];
         this.div = null;
@@ -136,7 +163,9 @@ class Game {
 
     appendNumber() {
         this.div = document.getElementById("diceNumber");
-        this.div.innerText = this.rollDice();
+        const diceResult = this.rollDice();
+        this.div.innerText = diceResult;
+        this.diceResult = diceResult;
     }
 
     // pawnTurn() {
@@ -157,7 +186,6 @@ class Game {
 
         if (changedNick.id === "red") {
             i = i - 5;
-            console.log(i)
             if (i === 0) {
                 changedNick = document.getElementById("blue");
                 i = 60;
@@ -197,6 +225,7 @@ class Game {
                     startGame.appendNicks();
                     startGame.removePawns();
                     startGame.appendPawns();
+                    startGame.renderDice();
                 }
             })
     }
@@ -221,5 +250,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
         //     }
         // };
     });
-    setInterval(game.timer, 5000)
+    setInterval(game.timer, 2000)
 });
