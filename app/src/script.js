@@ -141,7 +141,7 @@ class Game {
             this.i--;
         }
 
-        apiClient.post('/room')
+        apiClient.post('/room', { room: appData ? appData : null })
           .then((response) => {
               appData = response.data;
           })
@@ -164,7 +164,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
     document.getElementById("btDice").addEventListener("click", () => {
-        game.appendNumber()
+        game.appendNumber();
+        // appData = {
+        //     ...appData,
+        //     plansza: {
+        //         ...appData.plansza,
+        //         red: [3,4,5,7]
+        //     }
+        // };
     });
-    setInterval(game.timer, 3000)
+    setInterval(game.timer, 5000)
 });

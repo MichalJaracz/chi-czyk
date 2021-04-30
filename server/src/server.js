@@ -72,7 +72,11 @@ mongoClient.then(async err => {
         let responseData = null;
 
         if (req.session.username && req.session.userRoomId) {
-            responseData = await Room.findById(req.session.userRoomId);
+            if (req.body.room) {
+                await Room.findOneAndReplace({ _id: req.session.userRoomId }, req.body.room);
+            } else {
+                responseData = await Room.findById(req.session.userRoomId);
+            }
         }
 
         res.setHeader('Content-Type', 'application/json');

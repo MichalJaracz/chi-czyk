@@ -69,6 +69,7 @@ const createRoom = async () => {
       blue: [0, 1, 2, 3],
       yellow: [0, 1, 2, 3],
     },
+    turn: 'red',
     red: {
       nick: '',
       // insertTime: Date.now(),
