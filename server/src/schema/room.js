@@ -70,31 +70,31 @@ const createRoom = async () => {
       yellow: [0, 1, 2, 3],
     },
     red: {
-      nick: 'Jan',
-      insertTime: Date.now(),
-      lastAct: Date.now(),
-      serverTime: Date.now(),
+      nick: '',
+      // insertTime: Date.now(),
+      // lastAct: Date.now(),
+      // serverTime: Date.now(),
       status: 'void',
     },
     green: {
-      nick: 'Ela',
-      insertTime: Date.now(),
-      lastAct: Date.now(),
-      serverTime: Date.now(),
+      nick: '',
+      // insertTime: Date.now(),
+      // lastAct: Date.now(),
+      // serverTime: Date.now(),
       status: 'void',
     },
     blue: {
-      nick: 'Joe',
-      insertTime: Date.now(),
-      lastAct: Date.now(),
-      serverTime: Date.now(),
+      nick: '',
+      // insertTime: Date.now(),
+      // lastAct: Date.now(),
+      // serverTime: Date.now(),
       status: 'void',
     },
     yellow: {
-      nick: 'Dupa',
-      insertTime: Date.now(),
-      lastAct: Date.now(),
-      serverTime: Date.now(),
+      nick: '',
+      // insertTime: Date.now(),
+      // lastAct: Date.now(),
+      // serverTime: Date.now(),
       status: 'void',
     },
   });
@@ -118,5 +118,15 @@ const getUserRoomId = async () => {
   return lastRoom._id;
 };
 
-module.exports = { Room, createRoom, getLastRoom, getUserRoomId };
+const setUserToRoom = async (roomId, nick) => {
+  const userColors = ['red', 'green', 'blue', 'yellow'];
+  const userRoom = await Room.findById(roomId);
+
+  const userColor = userColors.find(color => userRoom[color].nick === '');
+  userRoom[userColor].nick = nick;
+
+  return await userRoom.save();
+};
+
+module.exports = { Room, createRoom, getLastRoom, getUserRoomId, setUserToRoom };
 

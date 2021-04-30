@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const bodyParser = require('body-parser');
 const { mongoClient } = require('./service/mongoose');
-const { Room, createRoom, getLastRoom, getUserRoomId } = require('./schema/room');
+const { Room, createRoom, setUserToRoom, getUserRoomId } = require('./schema/room');
 
 const app = express();
 
@@ -54,15 +54,16 @@ mongoClient.then(async err => {
     });
 
     app.post('/user', async function (req, res, next) {
-        if (req.body.username) {
+        if (req.body.username && !req.session.username) {
             const userRoomId = await getUserRoomId();
+            await setUserToRoom(userRoomId, req.body.username);
 
             req.session.username = req.body.username;
             req.session.userRoomId = userRoomId;
 
             res.end();
         }
-        res.end('Set username! /username?name=RandomName');
+        res.end();
     });
 
     app.post('/room', async function (req, res, next) {

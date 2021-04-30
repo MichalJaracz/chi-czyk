@@ -63,7 +63,7 @@ class StartScreen {
             const redFields = [
                 'redField0', 'redField1', 'redField2', 'redField3',
                 ...this.getPawnIds(30),
-                /* reszta idkow "finalnych" pol */
+                'red-protect-pawn-0', 'red-protect-pawn-1', 'red-protect-pawn-2', 'red-protect-pawn-3'
             ];
             let redDiv = document.getElementById(redFields[element]);
             redDiv.innerHTML = `<div class="pawn-red" />`;
@@ -72,7 +72,10 @@ class StartScreen {
             const blueFields = [
                 'blueField0', 'blueField1', 'blueField2', 'blueField3',
                 ...this.getPawnIds(0),
-                /* reszta idkow "finalnych" pol */
+                'blue-protect-pawn-0',
+                'blue-protect-pawn-1',
+                'blue-protect-pawn-2',
+                'blue-protect-pawn-3'
             ];
             let blueDiv = document.getElementById(blueFields[element]);
             blueDiv.innerHTML = `<div class="pawn-blue" />`;
@@ -81,7 +84,10 @@ class StartScreen {
             const greenFields = [
                 'greenField0', 'greenField1', 'greenField2', 'greenField3',
                 ...this.getPawnIds(10),
-                /* reszta idkow "finalnych" pol */
+                'green-protect-pawn-0',
+                'green-protect-pawn-1',
+                'green-protect-pawn-2',
+                'green-protect-pawn-3'
             ];
             let greenDiv = document.getElementById(greenFields[element]);
             greenDiv.innerHTML = `<div class="pawn-green" />`;
@@ -90,7 +96,10 @@ class StartScreen {
             const yellowFields = [
                 'yellowField0', 'yellowField1', 'yellowField2', 'yellowField3',
                 ...this.getPawnIds(20),
-                /* reszta idkow "finalnych" pol */
+                'yellow-protect-pawn-0',
+                'yellow-protect-pawn-1',
+                'yellow-protect-pawn-2',
+                'yellow-protect-pawn-3'
             ];
             let yellowDiv = document.getElementById(yellowFields[element]);
             yellowDiv.innerHTML = `<div class="pawn-yellow" />`;
