@@ -9,7 +9,7 @@ body {
 .hidden {
     width: 100%;
     height: 100%;
-    background: #000; 
+    background: #000;
     position: fixed;
     top: 0;
     left: 0;
@@ -126,7 +126,7 @@ body {
     width: 120px;
     height: 120px;
     /* background-color: yellow; */
-} 
+}
 
 
 .pawn {
@@ -138,15 +138,15 @@ body {
 }
 
 .red-field {
-    position: absolute; 
-    top: 260px; 
+    position: absolute;
+    top: 260px;
     left: 70px;
     height: 40px;
     width: 200px;
 }
 .blue-field {
-    position: absolute; 
-    top: 50px; 
+    position: absolute;
+    top: 50px;
     left: 280px;
     height: 200px;
     width: 40px;
@@ -160,17 +160,23 @@ body {
     position: absolute; top: 310px; left: 280px;
     height: 40px;
     width: 200px;
-} 
+}
 
 .pawn-red {
     position: absolute;
+    top: 25%;
+    right: 25%;
     background-color: red;
+    border: 1px solid black;
     height: 20px;
     width: 20px;
     border-radius: 10px;
 }
 .pawn-blue {
     position: absolute;
+    top: 25%;
+    right: 25%;
+    border: 1px solid black;
     background-color: blue;
     height: 20px;
     width: 20px;
@@ -178,6 +184,9 @@ body {
 }
 .pawn-green {
     position: absolute;
+    top: 25%;
+    right: 25%;
+    border: 1px solid black;
     background-color: green;
     height: 20px;
     width: 20px;
@@ -185,6 +194,9 @@ body {
 }
 .pawn-yellow {
     position: absolute;
+    top: 25%;
+    right: 25%;
+    border: 1px solid black;
     background-color: yellow;
     height: 20px;
     width: 20px;
@@ -192,8 +204,8 @@ body {
 }
 
 .timer {
-    width: 20px; 
-    height: 20px; 
-    background-color: black; 
+    width: 20px;
+    height: 20px;
+    background-color: black;
     color: #fff;
 }

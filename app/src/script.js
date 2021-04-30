@@ -1,40 +1,4 @@
-const response = {
-    gameOn: false,
-    plansza: {
-        red: [0, 1, 2, 3],
-        green: [0, 1, 2, 3],
-        blue: [0, 1, 2, 3],
-        yellow: [0, 1, 2, 3],
-    },
-    red: {
-        nick: 'Jan',
-        insertTime: Date.now(),
-        lastAct: Date.now(),
-        serverTime: Date.now(),
-        status: 'void',
-    },
-    green: {
-        nick: 'Ela',
-        insertTime: Date.now(),
-        lastAct: Date.now(),
-        serverTime: Date.now(),
-        status: 'void',
-    },
-    blue: {
-        nick: 'Joe',
-        insertTime: Date.now(),
-        lastAct: Date.now(),
-        serverTime: Date.now(),
-        status: 'void',
-    },
-    yellow: {
-        nick: 'Dupa',
-        insertTime: Date.now(),
-        lastAct: Date.now(),
-        serverTime: Date.now(),
-        status: 'void',
-    },
-};
+let appData = null;
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:3000',
@@ -60,39 +24,77 @@ class StartScreen {
     }
 
     appendNicks() {
-        document.getElementById("red").append(response.red.nick);
-        document.getElementById("blue").append(response.blue.nick);
-        document.getElementById("green").append(response.green.nick);
-        document.getElementById("yellow").append(response.yellow.nick);
+        document.getElementById("red").innerText = appData.red.nick;
+        document.getElementById("blue").innerText = appData.blue.nick;
+        document.getElementById("green").innerText = appData.green.nick;
+        document.getElementById("yellow").innerText = appData.yellow.nick;
+    }
+
+    getPawns(firstField) {
+        const lastGameField = 41;
+        const arrayToIterate = [firstField, ...Array(lastGameField)];
+
+        return arrayToIterate.reduce((array, currentValue, index) => {
+            if (currentValue) {
+                return [...array, currentValue]
+            }
+            const newValue = array[index - 1] + 1;
+            if (!currentValue && newValue <= lastGameField) {
+                return [...array, newValue]
+            } else {
+                return [...array, 0];
+            }
+        }, []);
+    }
+
+    getPawnIds(firstField) {
+        return this.getPawns(firstField).map(id => `pawn-${id}`);
+    }
+
+    removePawns() {
+        $('div.pawn-red').remove();
+        $('div.pawn-blue').remove();
+        $('div.pawn-green').remove();
+        $('div.pawn-yellow').remove();
     }
 
     appendPawns() {
-        // const redField = document.getElementsByClassName("red-square");
-        // console.log(redField.children)
-        response.plansza.red.forEach(element => {
-            let redDiv = document.getElementById(`redField${element}`);
-            let div = document.createElement('div');
-            div.className = "pawn-red"
-            redDiv.append(div);
-        })
-        response.plansza.blue.forEach(element => {
-            let blueDiv = document.getElementById(`blueField${element}`);
-            let div = document.createElement('div');
-            div.className = "pawn-blue"
-            blueDiv.append(div);
-        })
-        response.plansza.green.forEach(element => {
-            let greenDiv = document.getElementById(`greenField${element}`);
-            let div = document.createElement('div');
-            div.className = "pawn-green"
-            greenDiv.append(div);
-        })
-        response.plansza.yellow.forEach(element => {
-            let yellowDiv = document.getElementById(`yellowField${element}`);
-            let div = document.createElement('div');
-            div.className = "pawn-yellow"
-            yellowDiv.append(div);
-        })
+        appData.plansza.red.forEach(element => {
+            const redFields = [
+                'redField0', 'redField1', 'redField2', 'redField3',
+                ...this.getPawnIds(30),
+                /* reszta idkow "finalnych" pol */
+            ];
+            let redDiv = document.getElementById(redFields[element]);
+            redDiv.innerHTML = `<div class="pawn-red" />`;
+        });
+        appData.plansza.blue.forEach(element => {
+            const blueFields = [
+                'blueField0', 'blueField1', 'blueField2', 'blueField3',
+                ...this.getPawnIds(0),
+                /* reszta idkow "finalnych" pol */
+            ];
+            let blueDiv = document.getElementById(blueFields[element]);
+            blueDiv.innerHTML = `<div class="pawn-blue" />`;
+        });
+        appData.plansza.green.forEach(element => {
+            const greenFields = [
+                'greenField0', 'greenField1', 'greenField2', 'greenField3',
+                ...this.getPawnIds(10),
+                /* reszta idkow "finalnych" pol */
+            ];
+            let greenDiv = document.getElementById(greenFields[element]);
+            greenDiv.innerHTML = `<div class="pawn-green" />`;
+        });
+        appData.plansza.yellow.forEach(element => {
+            const yellowFields = [
+                'yellowField0', 'yellowField1', 'yellowField2', 'yellowField3',
+                ...this.getPawnIds(20),
+                /* reszta idkow "finalnych" pol */
+            ];
+            let yellowDiv = document.getElementById(yellowFields[element]);
+            yellowDiv.innerHTML = `<div class="pawn-yellow" />`;
+        });
     }
 
     async setUsername() {
@@ -120,7 +122,7 @@ class Game {
 
     appendNumber() {
         this.div = document.getElementById("diceNumber");
-        this.div.append(this.rollDice());
+        this.div.innerText = this.rollDice();
     }
 
     timer() {
@@ -131,20 +133,27 @@ class Game {
         }
 
         apiClient.post('/room')
-          .then((response) => console.log(response))
-
+          .then((response) => {
+              appData = response.data;
+          })
+          .finally(() => {
+              if (appData) {
+                  startGame.appendNicks();
+                  startGame.removePawns();
+                  startGame.appendPawns();
+              }
+          })
     }
 }
 
+let startGame = new StartScreen();
+let game = new Game();
+
 window.addEventListener('DOMContentLoaded', (event) => {
-    let startGame = new StartScreen();
     document.getElementById("btOk").addEventListener("click", () => {
         startGame.onSetUsernameClick();
     });
-    startGame.appendNicks();
-    startGame.appendPawns();
 
-    let game = new Game();
     document.getElementById("btDice").addEventListener("click", () => {
         game.appendNumber()
     });
