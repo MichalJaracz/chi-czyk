@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="src/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
     <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
     <script src="src/script.js"></script>
 </head>
@@ -61,69 +62,69 @@
                 <div id="yellowField2" class="pawn" style="position: absolute; top: 60px; left: 10px;"></div>
                 <div id="yellowField3" class="pawn" style="position: absolute; top: 60px; left: 60px;"></div>
             </div>
-            <div class="pawn" style="position: absolute; top: 10px; left: 280px;"></div>
-            <div class="pawn" style="position: absolute; top: 10px; left: 330px; background-color: blue;"></div>
-            <div class="pawn" style="position: absolute; top: 60px; left: 330px;"></div>
-            <div class="pawn" style="position: absolute; top: 110px; left: 330px;"></div>
-            <div class="pawn" style="position: absolute; top: 160px; left: 330px;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 330px;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 380px;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 430px;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 480px;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 530px;"></div>
-            <div class="pawn" style="position: absolute; top: 260px; left: 530px;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 530px; background-color: green;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 480px;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 430px;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 380px;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 330px;"></div>
-            <div class="pawn" style="position: absolute; top: 360px; left: 330px;"></div>
-            <div class="pawn" style="position: absolute; top: 410px; left: 330px;"></div>
-            <div class="pawn" style="position: absolute; top: 460px; left: 330px;"></div>
-            <div class="pawn" style="position: absolute; top: 510px; left: 330px;"></div>
-            <div class="pawn" style="position: absolute; top: 510px; left: 280px;"></div>
-            <div class="pawn" style="position: absolute; top: 510px; left: 230px; background-color: yellow;"></div>
-            <div class="pawn" style="position: absolute; top: 460px; left: 230px;"></div>
-            <div class="pawn" style="position: absolute; top: 410px; left: 230px;"></div>
-            <div class="pawn" style="position: absolute; top: 360px; left: 230px;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 230px;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 180px;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 130px;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 80px;"></div>
-            <div class="pawn" style="position: absolute; top: 310px; left: 30px;"></div>
-            <div class="pawn" style="position: absolute; top: 260px; left: 30px;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 30px; background-color: red;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 80px;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 130px;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 180px;"></div>
-            <div class="pawn" style="position: absolute; top: 210px; left: 230px;"></div>
-            <div class="pawn" style="position: absolute; top: 160px; left: 230px;"></div>
-            <div class="pawn" style="position: absolute; top: 110px; left: 230px;"></div>
-            <div class="pawn" style="position: absolute; top: 60px; left: 230px;"></div>
-            <div class="pawn" style="position: absolute; top: 10px; left: 230px;"></div>
+            <div id="pawn-0" class="pawn" style="position: absolute; top: 10px; left: 330px; background-color: blue;">0</div>
+            <div id="pawn-1" class="pawn" style="position: absolute; top: 60px; left: 330px;">1</div>
+            <div id="pawn-2" class="pawn" style="position: absolute; top: 110px; left: 330px;">2</div>
+            <div id="pawn-3" class="pawn" style="position: absolute; top: 160px; left: 330px;">3</div>
+            <div id="pawn-4" class="pawn" style="position: absolute; top: 210px; left: 330px;">4</div>
+            <div id="pawn-5" class="pawn" style="position: absolute; top: 210px; left: 380px;">5</div>
+            <div id="pawn-6" class="pawn" style="position: absolute; top: 210px; left: 430px;">6</div>
+            <div id="pawn-7" class="pawn" style="position: absolute; top: 210px; left: 480px;">7</div>
+            <div id="pawn-8" class="pawn" style="position: absolute; top: 210px; left: 530px;">8</div>
+            <div id="pawn-9" class="pawn" style="position: absolute; top: 260px; left: 530px;">9</div>
+            <div id="pawn-10" class="pawn" style="position: absolute; top: 310px; left: 530px; background-color: green;">10</div>
+            <div id="pawn-11" class="pawn" style="position: absolute; top: 310px; left: 480px;">11</div>
+            <div id="pawn-12" class="pawn" style="position: absolute; top: 310px; left: 430px;">12</div>
+            <div id="pawn-13" class="pawn" style="position: absolute; top: 310px; left: 380px;">13</div>
+            <div id="pawn-14" class="pawn" style="position: absolute; top: 310px; left: 330px;">14</div>
+            <div id="pawn-15" class="pawn" style="position: absolute; top: 360px; left: 330px;">15</div>
+            <div id="pawn-16" class="pawn" style="position: absolute; top: 410px; left: 330px;">16</div>
+            <div id="pawn-17" class="pawn" style="position: absolute; top: 460px; left: 330px;">17</div>
+            <div id="pawn-18" class="pawn" style="position: absolute; top: 510px; left: 330px;">18</div>
+            <div id="pawn-19" class="pawn" style="position: absolute; top: 510px; left: 280px;">19</div>
+            <div id="pawn-20" class="pawn" style="position: absolute; top: 510px; left: 230px; background-color: yellow;">20</div>
+            <div id="pawn-21" class="pawn" style="position: absolute; top: 460px; left: 230px;">21</div>
+            <div id="pawn-22" class="pawn" style="position: absolute; top: 410px; left: 230px;">22</div>
+            <div id="pawn-23" class="pawn" style="position: absolute; top: 360px; left: 230px;">23</div>
+            <div id="pawn-24" class="pawn" style="position: absolute; top: 310px; left: 230px;">24</div>
+            <div id="pawn-25" class="pawn" style="position: absolute; top: 310px; left: 180px;">25</div>
+            <div id="pawn-26" class="pawn" style="position: absolute; top: 310px; left: 130px;">26</div>
+            <div id="pawn-27" class="pawn" style="position: absolute; top: 310px; left: 80px;">27</div>
+            <div id="pawn-28" class="pawn" style="position: absolute; top: 310px; left: 30px;">28</div>
+            <div id="pawn-29" class="pawn" style="position: absolute; top: 260px; left: 30px;">29</div>
+            <div id="pawn-30" class="pawn" style="position: absolute; top: 210px; left: 30px; background-color: red;">30</div>
+            <div id="pawn-31" class="pawn" style="position: absolute; top: 210px; left: 80px;">31</div>
+            <div id="pawn-32" class="pawn" style="position: absolute; top: 210px; left: 130px;">32</div>
+            <div id="pawn-34" class="pawn" style="position: absolute; top: 210px; left: 180px;">34</div>
+            <div id="pawn-35" class="pawn" style="position: absolute; top: 210px; left: 230px;">35</div>
+            <div id="pawn-36" class="pawn" style="position: absolute; top: 160px; left: 230px;">36</div>
+            <div id="pawn-37" class="pawn" style="position: absolute; top: 110px; left: 230px;">37</div>
+            <div id="pawn-39" class="pawn" style="position: absolute; top: 60px; left: 230px;">39</div>
+            <div id="pawn-40" class="pawn" style="position: absolute; top: 10px; left: 230px;">40</div>
+            <div id="pawn-41" class="pawn" style="position: absolute; top: 10px; left: 280px">41</div>
             <div class="red-field">
-                <div class="pawn" style="position: absolute; left: 10px; background-color: red;"></div>
-                <div class="pawn" style="position: absolute; left: 60px; background-color: red;"></div>
-                <div class="pawn" style="position: absolute; left: 110px; background-color: red;"></div>
-                <div class="pawn" style="position: absolute; left: 160px; background-color: red;"></div>
+                <div id="red-protect-pawn-0" class="pawn" style="position: absolute; left: 10px; background-color: red;"></div>
+                <div id="red-protect-pawn-1" class="pawn" style="position: absolute; left: 60px; background-color: red;"></div>
+                <div id="red-protect-pawn-2" class="pawn" style="position: absolute; left: 110px; background-color: red;"></div>
+                <div id="red-protect-pawn-3" class="pawn" style="position: absolute; left: 160px; background-color: red;"></div>
             </div>
             <div class="blue-field">
-                <div class="pawn" style="position: absolute; top: 10px; background-color: blue;"></div>
-                <div class="pawn" style="position: absolute; top: 60px; background-color: blue;"></div>
-                <div class="pawn" style="position: absolute; top: 110px; background-color: blue;"></div>
-                <div class="pawn" style="position: absolute; top: 160px; background-color: blue;"></div>
+                <div id="blue-protect-pawn-0" class="pawn" style="position: absolute; top: 10px; background-color: blue;"></div>
+                <div id="blue-protect-pawn-1" class="pawn" style="position: absolute; top: 60px; background-color: blue;"></div>
+                <div id="blue-protect-pawn-2" class="pawn" style="position: absolute; top: 110px; background-color: blue;"></div>
+                <div id="blue-protect-pawn-3" class="pawn" style="position: absolute; top: 160px; background-color: blue;"></div>
             </div>
             <div class="green-field">
-                <div class="pawn" style="position: absolute; left: 0px; background-color: green;"></div>
-                <div class="pawn" style="position: absolute; left: 50px; background-color: green;"></div>
-                <div class="pawn" style="position: absolute; left: 100px; background-color: green;"></div>
-                <div class="pawn" style="position: absolute; left: 150px; background-color: green;"></div>
+                <div id="green-protect-pawn-0" class="pawn" style="position: absolute; left: 0px; background-color: green;"></div>
+                <div id="green-protect-pawn-1" class="pawn" style="position: absolute; left: 50px; background-color: green;"></div>
+                <div id="green-protect-pawn-2" class="pawn" style="position: absolute; left: 100px; background-color: green;"></div>
+                <div id="green-protect-pawn-3" class="pawn" style="position: absolute; left: 150px; background-color: green;"></div>
             </div>
             <div class="yellow-field">
-                <div class="pawn" style="position: absolute; top: 0px; background-color: yellow;"></div>
-                <div class="pawn" style="position: absolute; top: 50px; background-color: yellow;"></div>
-                <div class="pawn" style="position: absolute; top: 100px; background-color: yellow;"></div>
-                <div class="pawn" style="position: absolute; top: 150px; background-color: yellow;"></div>
+                <div id="yellow-protect-pawn-0" class="pawn" style="position: absolute; top: 0px; background-color: yellow;"></div>
+                <div id="yellow-protect-pawn-1" class="pawn" style="position: absolute; top: 50px; background-color: yellow;"></div>
+                <div id="yellow-protect-pawn-2" class="pawn" style="position: absolute; top: 100px; background-color: yellow;"></div>
+                <div id="yellow-protect-pawn-3" class="pawn" style="position: absolute; top: 150px; background-color: yellow;"></div>
             </div>
         </div>
 

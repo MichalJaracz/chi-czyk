@@ -1,86 +1,113 @@
-const response = {
-    gameOn: false,
-    plansza: {
-        red: [0, 1, 2, 3],
-        green: [0, 1, 2, 3],
-        blue: [0, 1, 2, 3],
-        yellow: [0, 1, 2, 3],
-    },
-    red: {
-        nick: 'Jan',
-        insertTime: Date.now(),
-        lastAct: Date.now(),
-        serverTime: Date.now(),
-        status: 'void',
-    },
-    green: {
-        nick: 'Ela',
-        insertTime: Date.now(),
-        lastAct: Date.now(),
-        serverTime: Date.now(),
-        status: 'void',
-    },
-    blue: {
-        nick: 'Joe',
-        insertTime: Date.now(),
-        lastAct: Date.now(),
-        serverTime: Date.now(),
-        status: 'void',
-    },
-    yellow: {
-        nick: 'Dupa',
-        insertTime: Date.now(),
-        lastAct: Date.now(),
-        serverTime: Date.now(),
-        status: 'void',
-    },
-}
+let appData = null;
+
+const apiClient = axios.create({
+    baseURL: 'http://localhost:3000',
+    withCredentials: true,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    }
+});
 
 class StartScreen {
+    nick = '';
+
     constructor() {
         this.nick = null;
     }
 
-    myFunction() {
+    async onSetUsernameClick() {
         this.nick = document.getElementById("myText").value;
-        console.log(this.nick);
         document.getElementById("hidden").style.display = "none";
+        this.setUsername();
     }
 
     appendNicks() {
-        document.getElementById("red").append(response.red.nick);
-        document.getElementById("blue").append(response.blue.nick);
-        document.getElementById("green").append(response.green.nick);
-        document.getElementById("yellow").append(response.yellow.nick);
+        document.getElementById("red").innerText = appData.red.nick;
+        document.getElementById("blue").innerText = appData.blue.nick;
+        document.getElementById("green").innerText = appData.green.nick;
+        document.getElementById("yellow").innerText = appData.yellow.nick;
+    }
+
+    getPawns(firstField) {
+        const lastGameField = 41;
+        const arrayToIterate = [firstField, ...Array(lastGameField)];
+
+        return arrayToIterate.reduce((array, currentValue, index) => {
+            if (currentValue) {
+                return [...array, currentValue]
+            }
+            const newValue = array[index - 1] + 1;
+            if (!currentValue && newValue <= lastGameField) {
+                return [...array, newValue]
+            } else {
+                return [...array, 0];
+            }
+        }, []);
+    }
+
+    getPawnIds(firstField) {
+        return this.getPawns(firstField).map(id => `pawn-${id}`);
+    }
+
+    removePawns() {
+        $('div.pawn-red').remove();
+        $('div.pawn-blue').remove();
+        $('div.pawn-green').remove();
+        $('div.pawn-yellow').remove();
     }
 
     appendPawns() {
-        // const redField = document.getElementsByClassName("red-square");
-        // console.log(redField.children)
-        response.plansza.red.forEach(element => {
-            let redDiv = document.getElementById(`redField${element}`);
-            let div = document.createElement('div');
-            div.className = "pawn-red"
-            redDiv.append(div);
-        })
-        response.plansza.blue.forEach(element => {
-            let blueDiv = document.getElementById(`blueField${element}`);
-            let div = document.createElement('div');
-            div.className = "pawn-blue"
-            blueDiv.append(div);
-        })
-        response.plansza.green.forEach(element => {
-            let greenDiv = document.getElementById(`greenField${element}`);
-            let div = document.createElement('div');
-            div.className = "pawn-green"
-            greenDiv.append(div);
-        })
-        response.plansza.yellow.forEach(element => {
-            let yellowDiv = document.getElementById(`yellowField${element}`);
-            let div = document.createElement('div');
-            div.className = "pawn-yellow"
-            yellowDiv.append(div);
-        })
+        appData.plansza.red.forEach(element => {
+            const redFields = [
+                'redField0', 'redField1', 'redField2', 'redField3',
+                ...this.getPawnIds(30),
+                'red-protect-pawn-0', 'red-protect-pawn-1', 'red-protect-pawn-2', 'red-protect-pawn-3'
+            ];
+            let redDiv = document.getElementById(redFields[element]);
+            redDiv.innerHTML = `<div class="pawn-red" />`;
+        });
+        appData.plansza.blue.forEach(element => {
+            const blueFields = [
+                'blueField0', 'blueField1', 'blueField2', 'blueField3',
+                ...this.getPawnIds(0),
+                'blue-protect-pawn-0',
+                'blue-protect-pawn-1',
+                'blue-protect-pawn-2',
+                'blue-protect-pawn-3'
+            ];
+            let blueDiv = document.getElementById(blueFields[element]);
+            blueDiv.innerHTML = `<div class="pawn-blue" />`;
+        });
+        appData.plansza.green.forEach(element => {
+            const greenFields = [
+                'greenField0', 'greenField1', 'greenField2', 'greenField3',
+                ...this.getPawnIds(10),
+                'green-protect-pawn-0',
+                'green-protect-pawn-1',
+                'green-protect-pawn-2',
+                'green-protect-pawn-3'
+            ];
+            let greenDiv = document.getElementById(greenFields[element]);
+            greenDiv.innerHTML = `<div class="pawn-green" />`;
+        });
+        appData.plansza.yellow.forEach(element => {
+            const yellowFields = [
+                'yellowField0', 'yellowField1', 'yellowField2', 'yellowField3',
+                ...this.getPawnIds(20),
+                'yellow-protect-pawn-0',
+                'yellow-protect-pawn-1',
+                'yellow-protect-pawn-2',
+                'yellow-protect-pawn-3'
+            ];
+            let yellowDiv = document.getElementById(yellowFields[element]);
+            yellowDiv.innerHTML = `<div class="pawn-yellow" />`;
+        });
+    }
+
+    async setUsername() {
+        return await apiClient.post('/user', { username: this.nick });
     }
 }
 
@@ -104,7 +131,7 @@ class Game {
 
     appendNumber() {
         this.div = document.getElementById("diceNumber");
-        this.div.append(this.rollDice());
+        this.div.innerText = this.rollDice();
     }
 
     timer() {
@@ -114,24 +141,37 @@ class Game {
             this.i--;
         }
 
-        fetch("http://localhost:3000/room", { method: "POST" })
-            .then((response) => response.data())
-            .then((data) => (console.log(data)));
+        apiClient.post('/room', { room: appData ? appData : null })
+          .then((response) => {
+              appData = response.data;
+          })
+          .finally(() => {
+              if (appData) {
+                  startGame.appendNicks();
+                  startGame.removePawns();
+                  startGame.appendPawns();
+              }
+          })
     }
-
 }
 
-window.addEventListener('DOMContentLoaded', (event) => {
-    let startGame = new StartScreen();
-    document.getElementById("btOk").addEventListener("click", () => {
-        startGame.myFunction();
-    })
-    startGame.appendNicks();
-    startGame.appendPawns();
+let startGame = new StartScreen();
+let game = new Game();
 
-    let game = new Game();
+window.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById("btOk").addEventListener("click", () => {
+        startGame.onSetUsernameClick();
+    });
+
     document.getElementById("btDice").addEventListener("click", () => {
-        game.appendNumber()
-    })
-    setInterval(game.timer(), 3000)
-})
+        game.appendNumber();
+        // appData = {
+        //     ...appData,
+        //     plansza: {
+        //         ...appData.plansza,
+        //         red: [3,4,5,7]
+        //     }
+        // };
+    });
+    setInterval(game.timer, 5000)
+});
