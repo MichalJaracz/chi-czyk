@@ -1,4 +1,10 @@
 let appData = null;
+let i = 60;
+let firstPawnRed = 0;
+let seconPawnRed = 1;
+let thirdPawnRed = 2;
+let fourthPawnRed = 3;
+
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:3000',
@@ -115,7 +121,6 @@ class Game {
     constructor() {
         this.dice = [1, 2, 3, 4, 5, 6];
         this.div = null;
-        this.i = 60;
         this.data = null;
     }
 
@@ -134,24 +139,66 @@ class Game {
         this.div.innerText = this.rollDice();
     }
 
+    // pawnTurn() {
+    //     console.log(this.rollDice())
+    //     if (this.rollDice() == 6) {
+    //         appData = {
+    //             ...appData,
+    //             plansza: {
+    //                 ...appData.plansza,
+    //                 red: [firstPawnRed + 3, seconPawnRed, thirdPawnRed, fourthPawnRed]
+    //             }
+    //         };
+    //     }
+    // }
+
     timer() {
         let changedNick = document.getElementById("red");
+
         if (changedNick.id === "red") {
-            $('#red1').append(`<a>${this.i}</a>`);
-            this.i--;
+            i = i - 5;
+            console.log(i)
+            if (i === 0) {
+                changedNick = document.getElementById("blue");
+                i = 60;
+            }
+        }
+        else if (changedNick.id === "blue") {
+            i = i - 5;
+            console.log(i)
+            if (i === 0) {
+                changedNick = document.getElementById("green");
+                i = 60;
+            }
+        }
+        else if (changedNick.id === "green") {
+            i = i - 5;
+            console.log(i)
+            if (i === 0) {
+                changedNick = document.getElementById("yellow");
+                i = 60;
+            }
+        }
+        else if (changedNick.id === "yellow") {
+            i = i - 5;
+            console.log(i)
+            if (i === 0) {
+                changedNick = document.getElementById("red");
+                i = 60;
+            }
         }
 
         apiClient.post('/room', { room: appData ? appData : null })
-          .then((response) => {
-              appData = response.data;
-          })
-          .finally(() => {
-              if (appData) {
-                  startGame.appendNicks();
-                  startGame.removePawns();
-                  startGame.appendPawns();
-              }
-          })
+            .then((response) => {
+                appData = response.data;
+            })
+            .finally(() => {
+                if (appData) {
+                    startGame.appendNicks();
+                    startGame.removePawns();
+                    startGame.appendPawns();
+                }
+            })
     }
 }
 
@@ -165,11 +212,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     document.getElementById("btDice").addEventListener("click", () => {
         game.appendNumber();
+        // game.pawnTurn()
         // appData = {
         //     ...appData,
         //     plansza: {
         //         ...appData.plansza,
-        //         red: [3,4,5,7]
+        //         red: [0, 1, 2, 3]
         //     }
         // };
     });
