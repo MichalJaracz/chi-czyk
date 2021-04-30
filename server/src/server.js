@@ -1,60 +1,38 @@
 const express = require('express');
-const app = express();
 const session = require('express-session');
+const cors = require('cors');
+
 const bodyParser = require('body-parser');
 const { mongoClient } = require('./service/mongoose');
-const { Room } = require('./schema/room');
+const { Room, createRoom, getLastRoom, getUserRoomId } = require('./schema/room');
 
-const createRoom = async () => {
-    return new Room({
-        gameOn: false,
-        plansza: {
-            red: [0, 1, 2, 3],
-            green: [0, 1, 2, 3],
-            blue: [0, 1, 2, 3],
-            yellow: [0, 1, 2, 3],
-        },
-        red: {
-            nick: 'Jan',
-            insertTime: Date.now(),
-            lastAct: Date.now(),
-            serverTime: Date.now(),
-            status: 'void',
-        },
-        green: {
-            nick: 'Ela',
-            insertTime: Date.now(),
-            lastAct: Date.now(),
-            serverTime: Date.now(),
-            status: 'void',
-        },
-        blue: {
-            nick: 'Joe',
-            insertTime: Date.now(),
-            lastAct: Date.now(),
-            serverTime: Date.now(),
-            status: 'void',
-        },
-        yellow: {
-            nick: 'Dupa',
-            insertTime: Date.now(),
-            lastAct: Date.now(),
-            serverTime: Date.now(),
-            status: 'void',
-        },
-    });
-};
+const app = express();
 
-const getLastRoom = async () => {
-    const rooms = await Room.find();
-    return rooms.pop();
-};
+const corsWhitelist = [
+  'http://localhost:8888',
+    /** other domains if any */
+];
 
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000000 } }));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.set('trust proxy', 1);
+app.use(cors({
+    credentials: true,
+    origin: function(origin, callback) {
+        if (corsWhitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    }
+}));
+app.use(session({
+    secret: 'keyboard cat',
+    cookie: {},
+    resave: false,
+    saveUninitialized : false,
+}));
+app.use(bodyParser());
 
 mongoClient.then(async err => {
-
     app.get('/create-room', async function (req, res, next) {
         const room = createRoom();
         await room.save();
@@ -62,41 +40,38 @@ mongoClient.then(async err => {
         res.end();
     });
 
-    app.get('/username', async function (req, res, next) {
-        if (req.query.name) {
-            req.session.username = req.query.name;
+    app.get('/test-session', function (req, res, next) {
+        if (req.session.views) {
+            req.session.views = req.session.views + 1;
+        }
+        if (!req.session.views) {
+            req.session.views = 1;
+        }
+        res.end(JSON.stringify({
+            views: req.session.views,
+            username: req.session.username,
+        }));
+    });
+
+    app.post('/user', async function (req, res, next) {
+        if (req.body.username) {
+            const userRoomId = await getUserRoomId();
+
+            req.session.username = req.body.username;
+            req.session.userRoomId = userRoomId;
 
             res.end();
         }
-        res.end('Set username!!!!! /username?name=RandomName');
+        res.end('Set username! /username?name=RandomName');
     });
 
-    app.get('/room', async function (req, res, next) {
+    app.post('/room', async function (req, res, next) {
+        console.log('POST /room, body:', req.body);
+
         let responseData = null;
 
-        // sprawdz czy username jest ustawione w sesji
-        // jezeli nie to zwroci null i wyswietl komponent do wprowadzenia nicku
-        if (req.session.username) {
-            if (req.session.userRoomId) {
-                responseData = await Room.findById(req.session.userRoomId);
-            }
-
-            if (!req.session.userRoomId) {
-                const lastRoom = await getLastRoom();
-
-                if (lastRoom.gameOn) {
-                    const newRoom = await createRoom();
-                    await newRoom.save();
-                    responseData = newRoom;
-
-                    req.session.userRoomId = newRoom._id;
-                }
-
-                if (!lastRoom.gameOn) {
-                    req.session.userRoomId = lastRoom._id;
-                    responseData = await Room.findById(req.session.userRoomId);
-                }
-            }
+        if (req.session.username && req.session.userRoomId) {
+            responseData = await Room.findById(req.session.userRoomId);
         }
 
         res.setHeader('Content-Type', 'application/json');

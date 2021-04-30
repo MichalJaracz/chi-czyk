@@ -34,17 +34,29 @@ const response = {
         serverTime: Date.now(),
         status: 'void',
     },
-}
+};
+
+const apiClient = axios.create({
+    baseURL: 'http://localhost:3000',
+    withCredentials: true,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    }
+});
 
 class StartScreen {
+    nick = '';
+
     constructor() {
         this.nick = null;
     }
 
-    myFunction() {
+    async onSetUsernameClick() {
         this.nick = document.getElementById("myText").value;
-        console.log(this.nick);
         document.getElementById("hidden").style.display = "none";
+        this.setUsername();
     }
 
     appendNicks() {
@@ -82,6 +94,10 @@ class StartScreen {
             yellowDiv.append(div);
         })
     }
+
+    async setUsername() {
+        return await apiClient.post('/user', { username: this.nick });
+    }
 }
 
 class Game {
@@ -114,24 +130,23 @@ class Game {
             this.i--;
         }
 
-        fetch("http://localhost:3000/room", { method: "POST" })
-            .then((response) => response.data())
-            .then((data) => (console.log(data)));
-    }
+        apiClient.post('/room')
+          .then((response) => console.log(response))
 
+    }
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
     let startGame = new StartScreen();
     document.getElementById("btOk").addEventListener("click", () => {
-        startGame.myFunction();
-    })
+        startGame.onSetUsernameClick();
+    });
     startGame.appendNicks();
     startGame.appendPawns();
 
     let game = new Game();
     document.getElementById("btDice").addEventListener("click", () => {
         game.appendNumber()
-    })
-    setInterval(game.timer(), 3000)
-})
+    });
+    setInterval(game.timer, 3000)
+});

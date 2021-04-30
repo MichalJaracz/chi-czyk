@@ -60,5 +60,63 @@ const roomSchema = new mongoose.Schema({
 
 const Room = mongoose.model('Room', roomSchema);
 
-module.exports = { Room };
+const createRoom = async () => {
+  return new Room({
+    gameOn: false,
+    plansza: {
+      red: [0, 1, 2, 3],
+      green: [0, 1, 2, 3],
+      blue: [0, 1, 2, 3],
+      yellow: [0, 1, 2, 3],
+    },
+    red: {
+      nick: 'Jan',
+      insertTime: Date.now(),
+      lastAct: Date.now(),
+      serverTime: Date.now(),
+      status: 'void',
+    },
+    green: {
+      nick: 'Ela',
+      insertTime: Date.now(),
+      lastAct: Date.now(),
+      serverTime: Date.now(),
+      status: 'void',
+    },
+    blue: {
+      nick: 'Joe',
+      insertTime: Date.now(),
+      lastAct: Date.now(),
+      serverTime: Date.now(),
+      status: 'void',
+    },
+    yellow: {
+      nick: 'Dupa',
+      insertTime: Date.now(),
+      lastAct: Date.now(),
+      serverTime: Date.now(),
+      status: 'void',
+    },
+  });
+};
+
+const getLastRoom = async () => {
+  const rooms = await Room.find();
+  return rooms.pop();
+};
+
+const getUserRoomId = async () => {
+  const lastRoom = await getLastRoom();
+
+  if (lastRoom.gameOn) {
+    const newRoom = await createRoom();
+    await newRoom.save();
+
+    return newRoom._id;
+  }
+
+  return lastRoom._id;
+};
+
+module.exports = { Room, createRoom, getLastRoom, getUserRoomId };
 
