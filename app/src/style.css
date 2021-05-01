@@ -72,7 +72,12 @@ body {
     width: 1000px;
 }
 
+.bt-dice-hide {
+    display: none;
+}
+
 .bt-dice {
+    display: block;
     position: absolute;
     left: 100px;
     top: 50px;
